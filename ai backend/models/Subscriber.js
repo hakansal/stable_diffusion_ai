@@ -11,10 +11,10 @@ const SubscriberSchema = new mongoose.Schema({
         type: Date,
         required: true
     },
-    subs_logs: {
+    subs_logs: [{
         type: mongoose.Schema.Types.ObjectId,
         ref: "Subs_log"
-    }
+    }]
 });
 
 module.exports = mongoose.model("Subs", SubscriberSchema);

@@ -5,7 +5,7 @@ const route = express.Router();
 const UserSchema = require("../models/UserModel");
 
 // İsim Güncelleme
-route.post("/güncelle/isim", verifyJWT, async (req, res) => {
+route.post("/guncelle/isim", verifyJWT, async (req, res) => {
     try {
         const { username } = req.body;
         const email = req.user.email;
@@ -23,7 +23,7 @@ route.post("/güncelle/isim", verifyJWT, async (req, res) => {
 });
 
 // Şifre Güncelleme
-route.post("/güncelle/sifre", verifyJWT, async (req, res) => {
+route.post("/guncelle/sifre", verifyJWT, async (req, res) => {
     try {
         const { newpassword } = req.body;
         const email = req.user.email;

@@ -1,6 +1,7 @@
 const express=require("express");
 const Connect =require("./config/Connect");
 const app=express();
+const cors=require("cors")
 //user route'ları
 const SignUser=require("./UsersRoutes/sign");
 const LoginUser=require("./UsersRoutes/Login");
@@ -10,8 +11,9 @@ const User_info=require("./UsersRoutes/Userİnfo");
 const LoginAdmin=require("./AdminRouters/Login");
 const AdminCrud=require("./AdminRouters/AdminCrud");
 const Admin_user_list=require("./AdminRouters/User_list");
-express.json();
+app.use(express.json());
 Connect();
+app.use(cors());
 
 //users
 app.use("/userapp",SignUser);
