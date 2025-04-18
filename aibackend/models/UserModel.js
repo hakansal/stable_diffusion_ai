@@ -23,10 +23,10 @@ const UserSchema=new mongoose.Schema({
         type:mongoose.Schema.Types.ObjectId,
         ref:"User_log"
     }],
-    subs:{
+    subs:[{
         type:mongoose.Schema.Types.ObjectId,
         ref:"Subs"
-    }
+    }]
 })
 
 module.exports=mongoose.model("User",UserSchema);

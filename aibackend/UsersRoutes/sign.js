@@ -3,8 +3,8 @@ const UserModel = require("../models/UserModel");
 const route = express.Router();
 const bcrypt = require("bcrypt");
 const User_logSchema = require("../models/Userlog");
-const SubscriberSchema=require("../models/Subscriber");
-const subs_logs=require("../models/Subslog");
+const SubscriberSchema = require("../models/Subscriber");
+const SubsLogSchema = require("../models/Subslog");
 
 route.post("/kayit", async (req, res) => {
     const { email, username, password } = req.body;
@@ -21,26 +21,36 @@ route.post("/kayit", async (req, res) => {
 
         const hashedPassword = await bcrypt.hash(password, 10);
 
-        // subs oluştur
-        const subs = new SubscriberSchema({
-            paycheck: false,
-            subs_limit_date: 0,
-            subs_logs: null
-        });
-        await subs.save();
-
         // kullanıcı oluştur
         const newUser = new UserModel({
             email,
             username,
-            password: hashedPassword,
-            subs: subs._id
+            password: hashedPassword
         });
-        //sub_log oluştur
-        const newsubLog=subs_logs({
-            user:newUser._id,
-            pay_log:null
-        })
+
+        await newUser.save();
+
+        // subs oluştur
+        const subs = new SubscriberSchema({
+            user: newUser._id,
+            paycheck: false,
+            subs_limit_date: new Date(),
+            subs_logs: []
+        });
+        await subs.save();
+
+        // subs referansı user'a bağla
+        newUser.subs = subs._id;
+
+        // sub_log oluştur
+        const newsubLog = new SubsLogSchema({
+            user: newUser._id,
+            pay_log: null
+        });
+        await newsubLog.save();
+
+        subs.subs_logs.push(newsubLog._id);
+        await subs.save();
 
         // log oluştur
         const logEntry = new User_logSchema({
@@ -53,10 +63,10 @@ route.post("/kayit", async (req, res) => {
         await newUser.save();
 
         return res.status(201).json({ message: "Kullanıcı başarıyla kaydedildi." });
+
     } catch (error) {
         return res.status(500).json({ error: "Sunucu hatası: " + error.message });
     }
 });
-
 
 module.exports = route;
