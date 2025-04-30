@@ -8,6 +8,8 @@ const LoginUser=require("./UsersRoutes/Login");
 const UpdateUser=require("./UsersRoutes/UserSelfCrud");
 const User_info=require("./UsersRoutes/Userİnfo");
 const Subscireber_pay=require("./UsersRoutes/Subscireber_pay");
+const Uses=require("./UsersRoutes/usescheck");
+const Pics=require("./UsersRoutes/pics");
 //admin route'ları
 const LoginAdmin=require("./AdminRouters/Login");
 const AdminCrud=require("./AdminRouters/AdminCrud");
@@ -22,6 +24,9 @@ app.use("/userapp",LoginUser);
 app.use("/userapp",UpdateUser);
 app.use("/userapp",User_info);
 app.use("/userapp",Subscireber_pay);
+app.use("/userapp",Uses)
+app.use("/userapp",Pics)
+
 
 
 //admins

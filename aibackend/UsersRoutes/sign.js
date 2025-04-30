@@ -25,7 +25,8 @@ route.post("/kayit", async (req, res) => {
         const newUser = new UserModel({
             email,
             username,
-            password: hashedPassword
+            password: hashedPassword,
+            uses:0
         });
 
         await newUser.save();
@@ -55,7 +56,8 @@ route.post("/kayit", async (req, res) => {
         // log oluştur
         const logEntry = new User_logSchema({
             user: newUser._id,
-            singdate: new Date()
+            singdate: new Date(),
+            uses_date:new Date()
         });
         await logEntry.save();
 

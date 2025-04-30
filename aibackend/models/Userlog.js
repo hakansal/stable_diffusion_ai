@@ -7,6 +7,10 @@ const User_logSchema= new mongoose.Schema({
         type: mongoose.Schema.Types.ObjectId,
         ref: "User"
     },
+    uses_date:{
+        type:Date,
+      
+    },
     singdate:{
         type:Date
     },

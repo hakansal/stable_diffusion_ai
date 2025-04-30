@@ -19,6 +19,7 @@ route.get("/kullanici", verifyJWT, async (req, res) => {
         let response = {
             email: user.email,
             username: usern.username,
+            uses:usern.uses,
             paycheck:null,
             subs_limit_date:null,
             subs_log:null,
