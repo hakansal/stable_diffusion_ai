@@ -44,6 +44,7 @@ route.get("/kullanim", verifyJWT, async (req, res) => {
          
         return res.status(400).json({message:`falsee`});
       } else {
+        console.log(lastLoginDay)
         const respone=await UserSchema.findOne({_id:userId});
         let newuses=respone.uses;
         newuses=newuses+1;

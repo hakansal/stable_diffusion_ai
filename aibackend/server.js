@@ -9,7 +9,9 @@ const UpdateUser=require("./UsersRoutes/UserSelfCrud");
 const User_info=require("./UsersRoutes/Userİnfo");
 const Subscireber_pay=require("./UsersRoutes/Subscireber_pay");
 const Uses=require("./UsersRoutes/usescheck");
-const Pics=require("./UsersRoutes/pics");
+const Pullpicks=require("./UsersRoutes/picks/pullpicks");
+const Pushpicks=require("./UsersRoutes/picks/pushpics");
+
 //admin route'ları
 const LoginAdmin=require("./AdminRouters/Login");
 const AdminCrud=require("./AdminRouters/AdminCrud");
@@ -25,7 +27,9 @@ app.use("/userapp",UpdateUser);
 app.use("/userapp",User_info);
 app.use("/userapp",Subscireber_pay);
 app.use("/userapp",Uses)
-app.use("/userapp",Pics)
+app.use("/userapp",Pullpicks)
+app.use("/userapp",Pushpicks)
+
 
 
 
