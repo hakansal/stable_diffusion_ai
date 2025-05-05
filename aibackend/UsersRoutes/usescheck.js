@@ -17,42 +17,45 @@ route.get("/kullanim", verifyJWT, async (req, res) => {
       return res.status(404).json({ error: "Kullanıcı veya kayıt bulunamadı." });
     }
 
+    let setuses = false;
     const subs_pay = subs.paycheck;
     const lastlog = user_log.uses_date;
-  if(user_log.uses_date==null){
-    const date=new Date();
-    await User_logSchema.updateOne({_id:userId},{uses_date:date })
-  }
- 
-    const today = new Date().getDay();
-    const lastLoginDay = new Date(lastlog).getDay();
 
-    if (subs_pay === false) {
-      // Eğer bugün, son giriş gününden 1 gün sonrasıysa uses sıfırlanır
-      if (today - lastLoginDay === 1 || (lastLoginDay === 6 && today === 0)) { 
-         
+    if (!lastlog) {
+      const date = new Date();
+      // 🔧 DÜZELTİLDİ: Artık `user` üzerinden update yapılıyor
+      await User_logSchema.updateOne({ user: userId }, { uses_date: date });
+    } else {
+      const today = new Date();
+      const sameDay =
+        today.getFullYear() === lastlog.getFullYear() &&
+        today.getMonth() === lastlog.getMonth() &&
+        today.getDate() === lastlog.getDate();
+
+      setuses = !sameDay;
+    }
+
+    if (!subs_pay) {
+      if (setuses) {
         await UserSchema.updateOne({ _id: userId }, { uses: 0 });
+        // Güncellenen tarihi tekrar yaz
+        await User_logSchema.updateOne({ user: userId }, { uses_date: new Date() });
       }
 
-      // Eğer uses hiç yoksa
       if (userinfo.uses == null) {
         await UserSchema.updateOne({ _id: userId }, { uses: 0 });
       }
 
-      // Eğer kullanım hakkı dolmuşsa
-      if (userinfo.uses >= 5) {
-         
-        return res.status(400).json({message:`falsee`});
+      if (userinfo.uses == 5) {
+        return res.status(400).json({ message: `falsee` });
       } else {
-        console.log(lastLoginDay)
-        const respone=await UserSchema.findOne({_id:userId});
-        let newuses=respone.uses;
-        newuses=newuses+1;
+        const updatedUser = await UserSchema.findOne({ _id: userId });
+        let newuses = (updatedUser.uses || 0) + 1;
+
         await UserSchema.updateOne({ _id: userId }, { uses: newuses });
-        return res.status(401).json("true");
+        return res.status(401).json("truee");
       }
     } else {
-      // Kullanıcı abone ise her zaman true döner
       return res.status(401).json("always true");
     }
 
