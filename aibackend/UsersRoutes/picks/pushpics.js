@@ -1,15 +1,12 @@
 const express=require("express");
 const verifyJWT = require("../JWT");
-const multer = require("multer");
 const fs = require("fs");
 const path = require("path");
 const route=express.Router();
 
+ 
 
-const storage=multer.memoryStorage();
-const send= multer({storage});
-
-route.post("/send/pics",verifyJWT,async(req ,res)=>{
+route.get("/send/pics",verifyJWT,async(req ,res)=>{
     const userId = req.user._id;
  try {
     

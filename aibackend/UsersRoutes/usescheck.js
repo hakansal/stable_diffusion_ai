@@ -23,7 +23,7 @@ route.get("/kullanim", verifyJWT, async (req, res) => {
 
     if (!lastlog) {
       const date = new Date();
-      // 🔧 DÜZELTİLDİ: Artık `user` üzerinden update yapılıyor
+       
       await User_logSchema.updateOne({ user: userId }, { uses_date: date });
     } else {
       const today = new Date();
