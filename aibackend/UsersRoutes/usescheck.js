@@ -23,7 +23,7 @@ route.get("/kullanim", verifyJWT, async (req, res) => {
 
     if (!lastlog) {
       const date = new Date();
-       
+
       await User_logSchema.updateOne({ user: userId }, { uses_date: date });
     } else {
       const today = new Date();
@@ -63,5 +63,38 @@ route.get("/kullanim", verifyJWT, async (req, res) => {
     return res.status(400).json({ error: error.message });
   }
 });
+
+route.get("/kullanim/kontrol", verifyJWT, async (req, res) => {
+  const userId = req.user._id;
+
+  try {
+    const userinfo = await UserSchema.findOne({ _id: userId });
+    const user_log = await User_logSchema.findOne({ user: userId });
+
+    if (!userinfo || !user_log) {
+      return res.status(404).json({ error: "Kullanıcı veya kayıt bulunamadı." });
+    }
+    let setuses = false;
+    const lastlog = user_log.uses_date;
+
+    const today = new Date();
+    const sameDay =
+      today.getFullYear() === lastlog.getFullYear() &&
+      today.getMonth() === lastlog.getMonth() &&
+      today.getDate() === lastlog.getDate();
+
+    setuses = !sameDay;
+
+    if (setuses) {
+      await UserSchema.updateOne({ _id: userId }, { uses: 0 });
+      return res.status(200).json({ message: "güncellendi" });
+    }
+    return res.status(200).json({message:setuses})
+
+  } catch (error) {
+    return res.status(400).json({ message: "hata" })
+  }
+
+})
 
 module.exports = route;
